@@ -37,6 +37,9 @@ private:
   // previous timestamp
   long previous_timestamp_;
 
+  // noise
+  long noise_ax, noise_ay;
+
   // tool object used to compute Jacobian and RMSE
   Tools tools;
   MatrixXd R_laser_;

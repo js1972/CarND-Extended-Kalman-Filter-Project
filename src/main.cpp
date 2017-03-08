@@ -169,6 +169,7 @@ int main(int argc, char* argv[]) {
 
   // compute the accuracy (RMSE)
   Tools tools;
+  cout << "\n\n********************" << endl;
   cout << "Accuracy - RMSE:" << endl << tools.CalculateRMSE(estimations, ground_truth) << endl;
 
   // close files
