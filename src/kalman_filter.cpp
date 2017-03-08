@@ -9,6 +9,7 @@ KalmanFilter::~KalmanFilter() {}
 
 void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
                         MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in) {
+  //THIS IS CURRENTLY NOT USED
   x_ = x_in;
   P_ = P_in;
   F_ = F_in;
@@ -52,16 +53,23 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     * update the state by using Extended Kalman Filter equations
   */
 
-  /* REFACTOR as this is the same as Update() but works on the Jacobians which are already computed */
+  //h(x) from equation 53
+  //https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58b461d5_sensor-fusion-ekf-reference/sensor-fusion-ekf-reference.pdf
+  double range = sqrt( pow(x_[0],2) + pow(x_[1],2) );
+  double bearing = atan(x_[1]/x_[0]);
+  double range_rate =  ((x_[0]*x_[2]+x_[1]*x_[3])/(sqrt( pow(x_[0],2) + pow(x_[1],2) )));
+  MatrixXd zpred(3, 1);
+  zpred << range, bearing, range_rate;
 
-  VectorXd y = z - H_ * x_;
+  //VectorXd y = z - H_ * x_;
+  VectorXd y = z - zpred;
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
   MatrixXd K = P_ * Ht * Si;
 
   x_ = x_ + (K * y);
-  long x_size = this->x_.size();
+  long x_size = x_.size();
   MatrixXd I = MatrixXd::Identity(x_size, x_size);
   P_ = (I - K * H_) * P_;
 }
