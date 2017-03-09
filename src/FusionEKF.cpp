@@ -13,7 +13,6 @@ using std::vector;
  */
 FusionEKF::FusionEKF() {
   is_initialized_ = false;
-
   previous_timestamp_ = 0;
 
   // initializing matrices
@@ -41,7 +40,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     */
 
     // first measurement
-    cout << "EKF initialisation" << endl;
+    cout << "EKF initialisation with first data row" << endl;
 
     ekf_.F_ = MatrixXd(4, 4);
     ekf_.F_ << 1, 0, 1, 0,
@@ -80,6 +79,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     previous_timestamp_ = measurement_pack.timestamp_;
 
     ekf_.x_ = VectorXd(4);
+
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
@@ -91,21 +91,25 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
       float x = ro * cos(phi);
       float y = ro * sin(phi);
-      if (x == 0 or y == 0) {
-        return;
-      }
+      //if (x == 0 or y == 0) {
+      //  return;
+      //}
+
       ekf_.x_ << x, y, 0, 0;
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       /**
       Initialize state.
       */
-      if (measurement_pack.raw_measurements_[0] == 0 or measurement_pack.raw_measurements_[1] == 0) {
-        return;
-      }
+      cout << "LASER measurement: x=" << measurement_pack.raw_measurements_[0] << "\ty=" << measurement_pack.raw_measurements_[1] << endl;
+      //if (measurement_pack.raw_measurements_[0] == 0 or measurement_pack.raw_measurements_[1] == 0) {
+      //  return;
+      //}
 
       ekf_.x_ << measurement_pack.raw_measurements_[0], measurement_pack.raw_measurements_[1], 0, 0;
     }
+
+    cout << "INITIAL STATE:" << endl << ekf_.x_ << endl;
 
     // done initializing, no need to predict or update
     is_initialized_ = true;
@@ -124,12 +128,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    */
 
   float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;	//dt - expressed in seconds
-  previous_timestamp_ = measurement_pack.timestamp_;
+  ekf_.F_(0, 2) = dt;
+  ekf_.F_(1, 3) = dt;
 
   if (dt > 0.0001) {
-    ekf_.F_(0, 2) = dt;
-    ekf_.F_(1, 3) = dt;
-
     float dt_2 = dt * dt;
     float dt_3 = dt_2 * dt;
     float dt_4 = dt_3 * dt;
@@ -142,6 +144,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
                0, dt_3 / 2 * noise_ay, 0, dt_2 * noise_ay;
 
     ekf_.Predict();
+    previous_timestamp_ = measurement_pack.timestamp_;
   }
 
   /*****************************************************************************

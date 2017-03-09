@@ -56,8 +56,15 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   //h(x) from equation 53
   //https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58b461d5_sensor-fusion-ekf-reference/sensor-fusion-ekf-reference.pdf
   double range = sqrt( pow(x_[0],2) + pow(x_[1],2) );
-  double bearing = atan(x_[1]/x_[0]);
-  double range_rate =  ((x_[0]*x_[2]+x_[1]*x_[3])/(sqrt( pow(x_[0],2) + pow(x_[1],2) )));
+  double bearing;
+  double range_rate;
+  if (fabs(range > 0.001)) {
+    bearing = atan(x_[1] / x_[0]);
+    range_rate = ((x_[0] * x_[2] + x_[1] * x_[3]) / range);
+  } else {
+    bearing = 0;
+    range_rate = 0;
+  }
   MatrixXd zpred(3, 1);
   zpred << range, bearing, range_rate;
 
