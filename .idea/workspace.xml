@@ -12,7 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3042b026-bd55-4757-965d-5e2940772068" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/FusionEKF.cpp" afterPath="$PROJECT_DIR$/src/FusionEKF.cpp" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/ide_profiles/README.md" afterPath="" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -430,12 +430,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1488936597419</updated>
-      <workItem from="1488936598626" duration="28056000" />
+      <workItem from="1488936598626" duration="28125000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28056000" />
+    <option name="totallyTimeSpent" value="28125000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-45" y="23" width="1440" height="873" extended-state="0" />
