@@ -24,7 +24,7 @@ void KalmanFilter::Predict() {
     * predict the state
   */
 
-  x_ = F_ * x_; // + u - assuming u is zero
+  x_ = F_ * x_; // + u - assuming u is zero (this is for control input)
   MatrixXd Ft = F_.transpose();
   P_ = F_ * P_ * Ft + Q_;
 }
@@ -53,8 +53,8 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     * update the state by using Extended Kalman Filter equations
   */
 
-  //h(x) from equation 53
-  //https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58b461d5_sensor-fusion-ekf-reference/sensor-fusion-ekf-reference.pdf
+  // h(x) from equation 53
+  // https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58b461d5_sensor-fusion-ekf-reference/sensor-fusion-ekf-reference.pdf
   double range = sqrt( pow(x_[0],2) + pow(x_[1],2) );
   double bearing;
   double range_rate;

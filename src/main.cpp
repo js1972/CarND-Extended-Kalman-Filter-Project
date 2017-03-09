@@ -2,7 +2,6 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include <stdlib.h>
 #include "Eigen/Dense"
 #include "FusionEKF.h"
 #include "ground_truth_package.h"
