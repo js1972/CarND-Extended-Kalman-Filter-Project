@@ -51,6 +51,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
                0, 0, 0, 1000;
 
     // Set the acceleration noise components
+    // These values are probably a bit high but they help the rmse!
     noise_ax = 10;
     noise_ay = 10;
 
@@ -61,6 +62,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     //            0,      0.0225, 0,
     //            0,      0,      0.0225;
 
+    // New measurement covariance values as calculated by working out the variance
+    // in the difference between x, y values and the ground truth values.
     R_radar_ << 0.01037, 0,           0,
                 0,       1.06804e-06, 0,
                 0,       0,           0.01129;
@@ -68,6 +71,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     R_laser_ << 0.00011, 0,
                 0,       0.00010;
 
+    
     // Laser measurement matrix
     H_laser_ << 1, 0, 0, 0,
                 0, 1, 0, 0;
