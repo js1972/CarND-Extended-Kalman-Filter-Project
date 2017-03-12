@@ -56,22 +56,22 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     noise_ay = 10;
 
     // Measurement covariance
-    //R_laser_ << 0.0225, 0,
-    //            0,      0.0225;
-    //R_radar_ << 0.0225, 0,      0,
-    //            0,      0.0225, 0,
-    //            0,      0,      0.0225;
+    R_laser_ << 0.0225, 0,
+                0,      0.0225;
+    R_radar_ << 0.0225, 0,      0,
+                0,      0.0225, 0,
+                0,      0,      0.0225;
 
     // New measurement covariance values as calculated by working out the variance
     // in the difference between x, y values and the ground truth values.
-    R_radar_ << 0.01037, 0,           0,
-                0,       1.06804e-06, 0,
-                0,       0,           0.01129;
+    //R_radar_ << 0.01037, 0,           0,
+    //            0,       1.06804e-06, 0,
+    //            0,       0,           0.01129;
 
-    R_laser_ << 0.00011, 0,
-                0,       0.00010;
+    //R_laser_ << 0.00011, 0,
+    //            0,       0.00010;
 
-    
+
     // Laser measurement matrix
     H_laser_ << 1, 0, 0, 0,
                 0, 1, 0, 0;
