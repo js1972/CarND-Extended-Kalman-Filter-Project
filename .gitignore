@@ -1,6 +1,9 @@
 # silly macOS
 .DS_Store
 
+# Jupyter Notebook
+.ipynb_checkpoints
+
 # build files
 build/
 
