@@ -25,7 +25,7 @@ Self-Driving Car Engineer Nanodegree Program
    some sample inputs in 'data/'.
     - eg. `./ExtendedKF ../data/sample-laser-radar-measurement-data-1.txt output.txt`
 
-There is also a `cmake-build-debug` directory - this is created by the CLion editor for debug builds.
+If you use CLion IDE then it will create a `cmake-build-debug` directory - this is where it puts all output.
 ## Editor Settings
 
 We've purposefully kept editor configuration files out of this repo in order to
