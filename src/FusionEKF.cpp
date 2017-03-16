@@ -56,20 +56,20 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     noise_ay = 10;
 
     // Measurement covariance
-    R_laser_ << 0.0225, 0,
-                0,      0.0225;
-    R_radar_ << 0.0225, 0,      0,
-                0,      0.0225, 0,
-                0,      0,      0.0225;
+    //R_laser_ << 0.0225, 0,
+    //            0,      0.0225;
+    //R_radar_ << 0.0225, 0,      0,
+    //            0,      0.0225, 0,
+    //            0,      0,      0.0225;
 
     // New measurement covariance values as calculated by working out the variance
-    // in the difference between x, y values and the ground truth values.
-    //R_radar_ << 0.01037, 0,           0,
-    //            0,       1.06804e-06, 0,
-    //            0,       0,           0.01129;
-
-    //R_laser_ << 0.00011, 0,
-    //            0,       0.00010;
+    // in the difference between x, y values and the ground truth values. See the
+    // notebook in the notebooks folder.
+    R_radar_ << 0.014412589090776581, 0,                      0,
+                0,                    1.3610836622321855e-06, 0,
+                0,                    0,                      0.011073356944289297;
+    R_laser_ << 0.0068374897772981421, 0,
+                0,                     0.0054887300686829819;
 
 
     // Laser measurement matrix
@@ -87,11 +87,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     ekf_.x_ = VectorXd(4);
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       // First, convert radar from polar to cartesian coordinates
-      float ro = measurement_pack.raw_measurements_[0];
+      // Include velocity values for radar as well.
+      float rho = measurement_pack.raw_measurements_[0];
       float phi = measurement_pack.raw_measurements_[1];
-      float rop = measurement_pack.raw_measurements_[2];
+      float rho_dot = measurement_pack.raw_measurements_[2];
 
-      ekf_.x_ << ro * cos(phi), ro * sin(phi), 0, 0;
+      ekf_.x_ << rho * cos(phi), rho * sin(phi), rho_dot * cos(phi), rho_dot * sin(phi);
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       ekf_.x_ << measurement_pack.raw_measurements_[0], measurement_pack.raw_measurements_[1], 0, 0;
